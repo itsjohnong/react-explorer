@@ -1,7 +1,7 @@
 import './App.css';
 import Explorer from './Explorer';
 
-const STUB = [
+export const STUB = [
   {
       label: "public",
       contents: [

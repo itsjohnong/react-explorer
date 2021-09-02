@@ -48,8 +48,22 @@ const DropdownMenu = (props) => {
     )
 }
 
-const filterTree = ({search, tree}) => {
-    
+const filterTree = ({tree, search}) => {
+    return tree.reduce((currentTree, child) => {
+        const isLeafNode = !child.contents
+        if (child.label.startsWith(search)) {
+            currentTree.push(child)
+        } else if (!isLeafNode) {
+            const filtered = filterTree({tree: child.contents, search})
+            if (filtered.length) {
+                currentTree.push({
+                    label: child.label,
+                    contents: filtered
+                })
+            }
+        }
+        return  currentTree
+    },[])
 }
 
 const Explorer = ({tree}) => {
@@ -61,9 +75,7 @@ const Explorer = ({tree}) => {
         setSearch(newState)
     }
 
-    const filteredData = tree.filter((info) => (
-        info.toString().toLowerCase().startsWith(search.toLowerCase())
-    ));
+    const filteredData = filterTree({search, tree})
 
     return (
         <>
