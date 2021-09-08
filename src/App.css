@@ -36,3 +36,47 @@
     transform: rotate(360deg);
   }
 }
+
+#list::marker {
+  width: 0;
+  height: 0;
+  border-left: 5px solid transparent;
+  border-right: 5px solid transparent;
+  border-bottom: 5px solid black;
+}
+
+.arrow::marker {
+  width: 0;
+  height: 0;
+  border-left: 5px solid transparent;
+  border-right: 5px solid transparent;
+  border-bottom: 5px solid black;
+  content: '>';
+}
+
+.arrow1::marker {
+  position: relative;
+  top: -5px;
+  content: '';
+  display: inline-block;
+  width: 15px;
+  height: 15px;
+  border-right: 0.2em solid black;
+  border-top: 0.2em solid black;
+  transform: rotate(135deg);
+  margin-right: 0.5em;
+  margin-left: 1em;
+}
+.triangle_up1 {
+  position: relative;
+  top: -5px;
+  content: '';
+  display: inline-block;
+  width: 15px;
+  height: 15px;
+  border-right: 0.2em solid black;
+  border-top: 0.2em solid black;
+  transform: rotate(-45deg);
+  margin-right: 0.5em;
+  margin-left: 1em;
+}

@@ -1,11 +1,20 @@
 import * as React from 'react';
+import s from "./Explorer.module.css";
+
+const Caret = ({isOpen}) => {
+    let className = s.caret;
+    if (isOpen) {
+        className += ` ${s.caretOpen}`
+    }
+    return <span className={className}/>
+}
 
 const Node = ({label, contents}) => {
     const [isShown, setIsShown] = React.useState(true)
     const hasContents = !!contents
 
     return (
-        <li>
+        <li className={s.listItem}>
             <span 
                 onClick={() => {
                     if (hasContents) {
@@ -15,10 +24,13 @@ const Node = ({label, contents}) => {
                     }
                 }}
             >
+                {hasContents && (
+                    <Caret isOpen={isShown}/>
+                )}
                 {label}
             </span>
             {hasContents && isShown && (
-                <ul>
+                <ul className={s.list}>
                     {contents.map((child, index) => {
                         return (
                             <Node 
@@ -36,7 +48,7 @@ const Node = ({label, contents}) => {
 
 const DropdownMenu = (props) => {
     return (
-            <ul>
+            <ul style={{padding:0}}>
                 {props.data.map((node,index) => {
                     return <Node 
                                 label={node.label} 
@@ -78,7 +90,7 @@ const Explorer = ({tree}) => {
     const filteredData = filterTree({search, tree})
 
     return (
-        <>
+        <div className={s.container}>
             <input 
                 type="text"
                 value={search}
@@ -86,7 +98,7 @@ const Explorer = ({tree}) => {
                 onChange={handleChange}
             />
             <DropdownMenu data={filteredData} />
-        </>
+        </div>
     )
 };
 
