@@ -60,7 +60,7 @@ const DropdownMenu = (props) => {
     )
 }
 
-const filterTree = ({tree, search}) => {
+export const filterTree = ({tree, search, caseSensitive = true}) => {
     return tree.reduce((currentTree, child) => {
         const isLeafNode = !child.contents
         if (child.label.startsWith(search)) {
