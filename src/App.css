@@ -80,3 +80,7 @@
   margin-right: 0.5em;
   margin-left: 1em;
 }
+
+.customItem {
+  font-weight: bold;
+}

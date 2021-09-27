@@ -1,20 +1,19 @@
 import * as React from 'react';
 import s from "./Explorer.module.css";
+import cn from 'classnames';
 
-const Caret = ({isOpen}) => {
-    let className = s.caret;
-    if (isOpen) {
-        className += ` ${s.caretOpen}`
-    }
-    return <span className={className}/>
+const Caret = ({isOpen, className, style}) => {
+    return <span className={cn(s.caret, className, {
+        [s.caretOpen]: isOpen
+    })} style={style}/>
 }
 
-const Node = ({label, contents}) => {
+const Node = ({label, contents, classNames, guidelineStyle, customStyles}) => {
     const [isShown, setIsShown] = React.useState(true)
     const hasContents = !!contents
 
     return (
-        <li className={s.listItem}>
+        <li className={cn(s.listItem, classNames.listItem)} style={customStyles.listItem}>
             <span 
                 onClick={() => {
                     if (hasContents) {
@@ -25,18 +24,22 @@ const Node = ({label, contents}) => {
                 }}
             >
                 {hasContents && (
-                    <Caret isOpen={isShown}/>
+                    <Caret isOpen={isShown} className={classNames.caret} style={customStyles.caret}/>
                 )}
                 {label}
             </span>
             {hasContents && isShown && (
-                <ul className={s.list}>
+                <ul className={cn(s.list, classNames.list)} style={{borderColor: guidelineStyle.color, borderStyle: guidelineStyle.style, ...customStyles.list}}>
                     {contents.map((child, index) => {
                         return (
                             <Node 
                                 label={child.label} 
                                 contents={child.contents} 
-                                key={index} 
+                                key={index}
+                                classNames={classNames}
+                                guidelineStyle={guidelineStyle}
+                                customStyles={customStyles}
+
                             />
                         )
                     })}
@@ -51,6 +54,7 @@ const DropdownMenu = (props) => {
             <ul style={{padding:0}}>
                 {props.data.map((node,index) => {
                     return <Node 
+                                {...props}
                                 label={node.label} 
                                 contents={node.contents} 
                                 key={index}
@@ -60,6 +64,7 @@ const DropdownMenu = (props) => {
     )
 }
 
+// Add parameter to tree to be case sensitive or not
 export const filterTree = ({tree, search, caseSensitive = true}) => {
     return tree.reduce((currentTree, child) => {
         const isLeafNode = !child.contents
@@ -78,7 +83,33 @@ export const filterTree = ({tree, search, caseSensitive = true}) => {
     },[])
 }
 
-const Explorer = ({tree}) => {
+const styleNames = [
+    "container",
+    "list",
+    "listItem",
+    "highlightedListItem",
+    "searchbox",
+    "caret"
+]
+const defaultClassNames = styleNames.reduce((acc, c) => {
+    return {...acc, [c]: ""}
+},{})
+
+const defaultStyles = styleNames.reduce((acc, c) => {
+    return {...acc, [c]: {}}
+},{})
+
+const defaultGuidelineStyle = {
+    color: "currentColor",
+    style: "dashed"
+}
+
+const Explorer = ({tree, classNames = {}, guideline = {}, styles={}}) => {
+    const customClassNames = {...defaultClassNames, ...classNames}
+
+    const customStyles = {...defaultStyles, ...styles}
+
+    const guidelineStyle = {...defaultGuidelineStyle, ...guideline}
 
     const [search, setSearch] = React.useState("");
 
@@ -90,14 +121,17 @@ const Explorer = ({tree}) => {
     const filteredData = filterTree({search, tree})
 
     return (
-        <div className={s.container}>
+        <div className={cn(s.container, customClassNames.container)} style={customStyles.container}>
             <input 
                 type="text"
                 value={search}
                 placeholder="index.js"
                 onChange={handleChange}
+                className={customClassNames.searchbox}
+                style={customStyles.searchbox}
             />
-            <DropdownMenu data={filteredData} />
+            {/* short hand for classNames={classNames}, guideLineColor={guidelineColor} */}
+            <DropdownMenu data={filteredData} classNames={customClassNames} {...{guidelineStyle, customStyles}}/>
         </div>
     )
 };

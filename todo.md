@@ -1,0 +1,32 @@
+- [x] Custom styles / classNames for:
+  - [x] Container
+  - [x] List
+  - [x] ListItem
+  - [x] Highlighted list item
+  - [x] Searchbox
+  - [x] Guideline color / style
+- Render props for:
+  - ListItem - (label) => React.Node
+  - Searchbox
+  - Toggle All button
+- Handlers
+  - On click (listitem) => void
+  - On change
+    - (updatedTree, changedField: {field: '', isOpen: false}) => void
+  - On search
+    - (updatedTree, searchValue)
+- Support options
+  - Searchable
+  - Dynamic content (stretch goal)
+    - Promise => ({label: string, content?: Array<Obj>})
+  - searchValue
+  - guidelines
+  - toggle all
+- Accessiblity
+  - Keyboard navigation
+    - Focus with tab
+    - Arrow key to open / step in
+    - Aria labels on text
+    - Enter to select/toggle
+- Write up README with docs and examples
+- Publish to npm

@@ -34,7 +34,7 @@ export const STUB = [
 
 function App() {
   return (
-    <Explorer tree={STUB} />
+    <Explorer tree={STUB} styles={{listItem:{fontWeight:"bold"}}} />
   );
 }
 
